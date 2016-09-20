@@ -15,7 +15,9 @@ from charms.reactive import RelationBase
 from charms.reactive import hook
 from charms.reactive import scopes
 
+
 class KubeAPIProvider(RelationBase):
+    ''' Sends the IPAddress and Port '''
     scope = scopes.GLOBAL
 
     @hook('{provides:kube-api}-relation-{joined,changed}')
@@ -24,20 +26,12 @@ class KubeAPIProvider(RelationBase):
         conv.set_state('{relation_name}.connected')
 
     @hook('{provides:kube-api}-relation-{departed}')
-    def joined_or_changed(self):
+    def departed(self):
         conv = self.conversation()
         conv.remove_state('{relation_name}.connected')
 
-
-
-    def set_api_credentials(self, private_address, port, tls=False,
-            tls_key=None, tls_cert=None):
+    def set_api_port(self, port):
         ''' Set the various KW args on the relationship conversation '''
-        credentials = {'private_address': private_address,
-                       'port': port,
-                       'tls': tls,
-                       'tls_key': tls_key,
-                       'tls_cert': tls_cert}
+        credentials = {'port': port}
         conv = self.conversation()
         conv.set_remote(data=credentials)
-
