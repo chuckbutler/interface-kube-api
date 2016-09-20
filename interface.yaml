@@ -1,0 +1,4 @@
+name: kube-api
+summary: provides the kubernetes api credentials
+version: 1
+maintainer: "Charles Butler <charles.butler@canonical.com>"
